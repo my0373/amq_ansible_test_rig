@@ -1,0 +1,1 @@
+# amq_ansible_test_rig
