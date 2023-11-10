@@ -1,0 +1,50 @@
+---
+- name: Check the VM meets the prerequisites
+  hosts: all
+  tasks:
+    
+
+    ## Check for each of the supported operating systems. 
+  
+    - name: assert the operating system is rhel version 9
+      ansible.builtin.assert:
+        that: ( ansible_distribution == "CentOS" and ansible_distribution_major_version == "9" )
+      register: is_centos 
+      ignore_errors: True
+
+    - name: assert the operating system is rhel version 9
+      ansible.builtin.assert:
+        that: ( ansible_distribution == "RedHat" and ansible_distribution_major_version == "9" )
+      register: is_rhel
+      ignore_errors: True
+
+
+    - name: assert the operating system is Fedora version 39
+      ansible.builtin.assert:
+        that: ( ansible_distribution == "Fedora" and ansible_distribution_major_version == "38" )
+      register: is_fedora
+      ignore_errors: True
+
+    ## If ALL of the operating system checks fail, then we set a fact called os_check.
+    ## If os_check is false, then it has failed one or more hosts.
+    ## If os_check is True, then at least one of the checks has been successful.
+
+    - name: Check if the OS are compatible and set the os_check fact
+      set_fact: 
+        os_check: false
+      when: is_centos.failed == True and
+            is_fedora.failed == True and 
+            is_rhel.failed == True  
+     
+
+    ## Enforce a playbook fail when the OS check has failed.
+    - name: Fail when unsupported operating system is found.
+      ansible.builtin.fail:
+        msg: "You are not running a supported operating system.
+              Please check the README.md for a list of supported operating systems."
+      when: os_check != True
+
+          
+
+    
+    

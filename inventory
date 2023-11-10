@@ -1,0 +1,2 @@
+[broker]
+amq1   ansible_host: 10.16.10.11 ansible_user: myork
