@@ -21,7 +21,7 @@
 
     - name: assert the operating system is Fedora version 39
       ansible.builtin.assert:
-        that: ( ansible_distribution == "Fedora" and ansible_distribution_major_version == "38" )
+        that: ( ansible_distribution == "Fedora" and ansible_distribution_major_version == "39" )
       register: is_fedora
       ignore_errors: True
 
